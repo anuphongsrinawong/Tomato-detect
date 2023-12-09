@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Display tomato</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"></script>
+  <script type="text/javascript" src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+</head>
+
+<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #1B0501;">
+    <div class=" container">
+
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="/">Home</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/control">Control Robot</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="/admin">Admin</a>
+          </li>
+        </ul>
+      </div>
+
+    </div>
+  </nav>
+
+  <main class="container">
+    <div class="container">
+      <h1 class="my-5 text-center">Control PAGE</h1>
+
+      <div class="text-center my-5">
+        <div class="input-box">
+          <div class="row align-items-center">
+            <div class="col">
+              <label for="X-value">
+                <h1>x =</h1>
+              </label>
+            </div>
+            <div class="col">
+              <input type="number" id="textbox-x" class="form-control" value="0" min="-20" max="40">
+            </div>
+            <div class="col">
+              <label for="Y-value">
+                <h1>y =</h1>
+              </label>
+            </div>
+            <div class="col">
+              <input type="number" id="textbox-y" class="form-control" value="0" min="-20" max="40">
+            </div>
+            <div class="col">
+              <label for="Z-value">
+                <h1>z =</h1>
+              </label>
+            </div>
+            <div class="col">
+              <input type="number" id="textbox-z" class="form-control" value="0" min="-20" max="40">
+            </div>
+          </div>
+
+          <button id="submit" class="btn btn-primary">submit</button>
+          <button id="sethome" class="btn btn-warning">Sethome</button>
+          <button id="setposition" class="btn btn-info">Setposition</button>
+          
+
+        </div>
+  
+      </div>
+    </div>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-md-4">
+          <div class="card">
+            <img id="liveImage" src="{{ url_for('static', filename='img/image1.jpg') }}" width="640" height="480" class="card-img-top img-fluid" alt="Image 1" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <img id="liveImage1" src="{{ url_for('static', filename='img/image2.jpg') }}" width="640" height="480" class="card-img-top img-fluid" alt="Image 1" />
+          </div>
+        </div>
+        <div class="col-md-4">
+          <div class="card">
+            <img id="liveImage2" src="{{ url_for('static', filename='img/image3.jpg') }}" width="640" height="480" class="card-img-top img-fluid" alt="Image 1" />
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="text-center my-5 fs-50 fw-bold">ตารางข้อมูลมะเขือเทศ</h1>
+
+    <div class="row">
+      <div class="col-6">
+        <p class="text-start" id="count_tomato">จำนวนที่ตรวจจับได้ - ลูก</p>
+      </div>
+      <div class="col-6">
+        <p class="text-end" id="count1_tomato">จำนวนที่สุก - ลูก</p>
+      </div>
+    </div>
+    </div>
+
+    <div class="container">
+      <table class="table table-dark table-responsive" id="customers">
+        <thead>
+          <tr>
+            <th class="text-lg-10 text-md-5">ลำดับ</th>
+            <th class="text-lg-10 text-md-5">พิกัด (x, y, z) cm</th>
+            <!-- <th class="text-lg-10 text-md-5">ขนาด (a, b) mm</th> -->
+            <th class="text-lg-10 text-md-5">เปอร์เซ็นต์ความสุก %</th>
+            <th class="text-lg-10 text-md-5">ระดับ</th>
+            <th class="text-lg-10 text-md-5">สุกหรือไม่สุก</th>
+          </tr>
+        </thead>
+        <tbody id="data-output">
+        
+        </tbody>
+      </table>
+    </div>
+
+    
+
+  </main>
+  <br><br><br><br><br><br><br><br><br><br><br>
+  <footer class="text-white text-center"
+    style="background-color: #1B0501; position: absolute; bottom: -100; width: 100%;">
+    <div class="container">
+      <p>ระดับสีเขียว 0 - 23.18%, ระดับสีเหลือง 23.19 - 53.11%, ระดับสีส้ม 53.12 - 84.99%, ระดับสีแดง
+        >85.00%</p>
+      <p>มะเขือเทศสุกเมื่อเป็น ระดับสีแดง</p>
+    </div>
+  </footer>
+
+
+
+
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"></script>
+
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/4.0.1/socket.io.js"
+    integrity="sha512-q/dWJ3kcmjBLU4Qc47E4A9kTB4m3wuTY7vkFJDTZKjTs8jhyGQnaUrxa0Ytd0ssMZhbNua9hE+E7Qv1j+DyZwA=="
+    crossorigin="anonymous"></script>
+
+  <script>
+    let protocol = window.location.protocol;
+    let domain = window.location.hostname;
+    let port = window.location.port;
+
+    // Connect to the Socket.IO server using the extracted information
+    let socket = io.connect(protocol + '//' + domain + (port ? (':' + port) : ''));
+
+    socket.on('image', function (data) {
+      $('#liveImage').attr('src', 'data:image/jpeg;base64,' + data.image01);
+      $('#liveImage1').attr('src', 'data:image/jpeg;base64,' + data.image02);
+      $('#liveImage2').attr('src', 'data:image/jpeg;base64,' + data.image03);
+
+      // console.log(data.tomato)
+      tomatos = data.tomato
+      let placeholder = document.querySelector("#data-output");
+      let out = "";
+      let text1 = "จำนวนที่จับได้: ";
+      let text2 = " ลูก";
+      let count = tomatos.length; // จำนวนของ tomatos
+      let count1 = 0; // จำนวนที่ tomato.result เท่ากับ 1
+      let id = 0
+      for (let tomato of tomatos) {
+        id= id+1
+        let resultText = tomato.result === 1 ? "สุก" : "ไม่สุก";
+        let tomatolevel;
+        if (tomato.level === 1) {
+          tomatolevel = "สีเขียว";
+        } else if (tomato.level === 2) {
+          tomatolevel = "สีเหลือง";
+        } else if (tomato.level === 3) {
+          tomatolevel = "สีส้ม";
+        } else if (tomato.level === 4) {
+          tomatolevel = "สีแดง";
+        } else {
+          tomatolevel = "ผิดพลาด";
+        }
+        out += `
+                        <tr>
+                            <td>${id}</td>
+                            <td>${tomato.xyz}</td>    
+                            <td>${tomato.percent}</td>
+                            <td>${tomatolevel}</td>
+                            <td>${resultText}</td>
+                        </tr>
+                    `;
+        if (tomato.result === 1) {
+          count1++; // เพิ่มค่า count1 ถ้า tomato.result เท่ากับ 1
+        }
+    
+      document.getElementById("count_tomato").textContent = text1 + count + text2;
+      document.getElementById("count1_tomato").textContent = "จำนวนที่สุก: " + count1 + " ลูก";
+      placeholder.innerHTML = out;
+  
+       } });
+   
+
+    // socket.on('arduino_data', function (data) {
+    //   document.getElementById('xyzData').innerHTML = 'Arduino Data: ' + data.data;
+    // });
+
+    // ปุ่ม Start Camera
+    $('#submit').click(function () {
+      let textbox_x = document.getElementById("textbox-x");
+      let textbox_y = document.getElementById("textbox-y");
+      let textbox_z = document.getElementById("textbox-z");
+       // สร้าง Object จากข้อความ JSON
+      let dataObject = {
+        status:"o",
+        x: textbox_x.value,
+        y: textbox_y.value,
+        z: textbox_z.value
+      };
+
+      // แปลง Object เป็น JSON และส่งไปทาง Socket.IO
+      let text = JSON.stringify(dataObject);
+      console.log(text);
+      socket.emit('control', text);
+    });
+
+    // ปุ่ม Stop Camera
+    $('#sethome').click(function () {
+      let dataObject = {
+        status:"h",
+        x: 0,
+        y: 0,
+        z: 0
+      };
+
+      // แปลง Object เป็น JSON และส่งไปทาง Socket.IO
+      let text = JSON.stringify(dataObject);
+      console.log(text);
+      socket.emit('control', text);
+    });
+
+    $('#setposition').click(function () {
+      let dataObject = {
+        status:"o",
+        x: 10,
+        y: 20,
+        z: 0
+      };
+
+      // แปลง Object เป็น JSON และส่งไปทาง Socket.IO
+      let text = JSON.stringify(dataObject);
+      console.log(text);
+      socket.emit('control', text);
+    });
+
+  </script>
+
+
+
+</body>
+
+</html>

@@ -25,58 +25,48 @@
 
 อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
 
-### โครงสร้างโฟลเดอร์
+## Key Features
 
-```bash
-Project/
-- yolov7/
-  - static
-  - templates
-  - appRS.py
-```
+1. **YOLOv7 Model:** Utilizes YOLOv7, a state-of-the-art object detection model, adapted for the specific task of detecting the ripeness of tomatoes.
 
-1.  **ติดตั้ง YOLOv7:**
+2. **Flask Web Control:** Implements a web control interface using Flask, allowing users to configure and monitor detection results through a web interface.
 
-    - ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository](https://github.com/WongKinYiu/yolov7) หรือ
+3. **Data and Coordinates to Arduino:** Sends the detection results and relevant data (such as the coordinates of detected tomatoes) to an Arduino for additional processing and control operations.
 
-    ```bash
-     git clone https://github.com/WongKinYiu/yolov7.git
-    ```
+## Installation and Usage
 
-2.  **นำเข้าไฟล์โปรเจค:**
-    - เข้าไปยังโฟลเดอร์ และ นำเข้าไฟล์:
-      ```bash
-      cd yolov7
-      git clone https://github.com/anuphongsrinawong/Tomato-detect.git
-      ```
-3.  **ติดตั้ง Library:**
-4.  - ติดตั้ง:
-      ```bash
-      pip install opencv-python==4.5.3
-      Flask 2.3.3
-      Flask-SocketIO 5.3.6
-      pyrealsense2 2.53.1.4623
-      serial 0.0.97
-      torch 1.13.1
-      numpy 1.24.1
-           ```
+1. **Install YOLOv7:**
 
-5.  **ติดตั้ง and เชื่อมต่อ Arduino:**
+   - Follow the installation instructions for YOLOv7 as specified in the [YOLOv7 repository](https://github.com/WongKinYiu/yolov7).
 
-    - Install the necessary libraries for communication with Arduino and establish a connection between Arduino and your computer.
+2. **Install Flask:**
 
-6.  **Start the System:**
-    - Start the system by running your main program and access the control interface through the Flask web application.
+   - Install Flask to create the web control interface:
+     ```bash
+     pip install Flask
+     ```
 
-## การใช้งาน
+3. **Install and Connect Arduino:**
 
-อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
+   - Install the necessary libraries for communication with Arduino and establish a connection between Arduino and your computer.
 
-1. **เริ่มการทำงานโปรแกรม**
-   ```bash
-     cd yolov7
-     pip install -r requirements.txt
-     python appRS.py
-   ```
+4. **Start the System:**
+   - Start the system by running your main program and access the control interface through the Flask web application.
+
+## Folder Structure
+
+|- project-root/
+|- src/ # โค้ดหลักของโปรเจ็กต์
+|- module1/ # โมดูล 1
+|- module2/ # โมดูล 2
+|- data/ # ข้อมูลที่ใช้ในโปรเจ็กต์
+|- docs/ # เอกสารโปรเจ็กต์
+|- user-manual.md # คู่มือการใช้งาน
+|- api-reference.md # คู่มือ API
+|- tests/ # ทดสอบ
+|- config/ # ไฟล์กำหนดค่า
+|- scripts/ # สคริปต์ที่ใช้ในการสนับสนุน
+|- LICENSE.md # ไฟล์ใบอนุญาต
+|- README.md # ไฟล์ README
 
 ## รายละเอียดโฟลเดอร์

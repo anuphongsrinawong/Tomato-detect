@@ -42,7 +42,6 @@
      ```
 
      ```bash
-     pip install Flask
      cd yolov7
      ```
      

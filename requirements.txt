@@ -1,0 +1,6 @@
+Flask==2.3.3
+Flask-SocketIO==5.3.6
+pyrealsense2==2.53.1.4623
+serial==0.0.97
+torch==1.13.1
+numpy==1.24.1

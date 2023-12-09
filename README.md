@@ -25,20 +25,29 @@
 
 อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
 
-## Installation and Usage
+1. **ติดตั้ง YOLOv7:**
 
-1. **Install YOLOv7:**
+   - ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository]  (https://github.com/WongKinYiu/yolov7). หรือ
+  
+     
+    ```bash
+     git clone https://github.com/WongKinYiu/yolov7.git
+     ```
 
-   - Follow the installation instructions for YOLOv7 as specified in the [YOLOv7 repository](https://github.com/WongKinYiu/yolov7).
-
-2. **Install Flask:**
+2. **ติดตั้ง Flask:**
 
    - Install Flask to create the web control interface:
      ```bash
      pip install Flask
      ```
 
-3. **Install and Connect Arduino:**
+     ```bash
+     pip install Flask
+     cd yolov7
+     ```
+     
+
+3. **ติดตั้ง and เชื่อมต่อ Arduino:**
 
    - Install the necessary libraries for communication with Arduino and establish a connection between Arduino and your computer.
 

@@ -24,27 +24,43 @@
 ## การติดตั้ง
 
 อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
+### โครงสร้างโฟลเดอร์
+ ```bash
+ Project/
+ - yolov7/
+   - static
+   - templates
+   - appRS.py
+ ```
 
 1. **ติดตั้ง YOLOv7:**
 
-   - ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository]  (https://github.com/WongKinYiu/yolov7). หรือ
+   - ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository](https://github.com/WongKinYiu/yolov7) หรือ
   
      
     ```bash
      git clone https://github.com/WongKinYiu/yolov7.git
      ```
 
-2. **ติดตั้ง Flask:**
-
-   - Install Flask to create the web control interface:
-     ```bash
-     pip install Flask
-     ```
-
+2. **นำเข้าไฟล์โปรเจค:**
+   - เข้าไปยังโฟลเดอร์ และ นำเข้าไฟล์:
      ```bash
      cd yolov7
+     git clone https://github.com/anuphongsrinawong/Tomato-detect.git
      ```
+3. **ติดตั้ง Library:**
+4. 
+   - ติดตั้ง:
+     ```bash
+     pip install opencv-python==4.5.3
+     Flask                   2.3.3
+Flask-SocketIO          5.3.6
+pyrealsense2            2.53.1.4623
+serial                  0.0.97
+torch                   1.13.1
+numpy                   1.24.1
      
+     ```
 
 3. **ติดตั้ง and เชื่อมต่อ Arduino:**
 
@@ -53,12 +69,20 @@
 4. **Start the System:**
    - Start the system by running your main program and access the control interface through the Flask web application.
 
-## Folder Structure
 
-|- project-root/
-  |- AppRS.py/ # โค้ดหลักของโปรเจ็กต์
-  |- templates/ # templates
-  |- static/ # static
+  
+## การใช้งาน
+
+อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
+
+1. **เริ่มการทำงานโปรแกรม**
+     
+    ```bash
+      cd yolov7
+      python appRS.py
+     ```
+
+
 
 
 ## รายละเอียดโฟลเดอร์

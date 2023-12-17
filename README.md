@@ -32,17 +32,17 @@
 
     ```bash
      git clone https://github.com/WongKinYiu/yolov7.git
+    cd yolov7
+    pip install -r requirements.txt
+    python detect.py
     ```
 
 2.  **นำเข้าไฟล์โปรเจค:**
     นำเข้าไฟล์:
     ```bash
-    cd yolov7
+    cd ../
     git clone https://github.com/anuphongsrinawong/Tomato-detect.git
-    ```
-3.  **ติดตั้ง Library:**
-    ติดตั้ง Library ที่จำเป็น:
-    ```bash
+    cd Tomato-detect
     pip install -r requirements.txt
     ```
 
@@ -69,8 +69,6 @@
 ## ตัวอย่าง
 
 1.การติดตั้ง
-![Image](https://images.unsplash.com/photo-1501780392773-287d506245a5?auto=format&fit=crop&w=1950&q=80&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D)
-
 2.การใช้งาน
 3.การแชร์เว็บไซต์
 

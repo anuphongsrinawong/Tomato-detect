@@ -27,8 +27,8 @@
 1.  **ติดตั้ง YOLOv7:**
 
     ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository](https://github.com/WongKinYiu/yolov7)
-    
-      หรือ
+
+    หรือ
 
     ```bash
      git clone https://github.com/WongKinYiu/yolov7.git
@@ -36,42 +36,44 @@
 
 2.  **นำเข้าไฟล์โปรเจค:**
     นำเข้าไฟล์:
-      ```bash
-      cd yolov7
-      git clone https://github.com/anuphongsrinawong/Tomato-detect.git
-      ```
+    ```bash
+    cd yolov7
+    git clone https://github.com/anuphongsrinawong/Tomato-detect.git
+    ```
 3.  **ติดตั้ง Library:**
     ติดตั้ง Library ที่จำเป็น:
-      ```bash
-      pip install -r requirements.txt
-      ```
+    ```bash
+    pip install -r requirements.txt
+    ```
 
 ## การใช้งาน
 
 ขั้นตอนการใช้งานมีดังนี้
 
 1. **เริ่มการทำงานโปรแกรม**
+
    ```bash
      cd yolov7
      python appRS.py
    ```
 
 2. **การแชร์เว็บไซต์ให้สามารถเข้าถึงผ่านอินเตอร์เน็ต**
+
    - 1.กดRun ngrok.exe
    - 2.พิมพ์คำสั่ง
-   
+
    ```bash
      ngrok http 5000
    ```
 
 ## ตัวอย่าง
+
 1.การติดตั้ง
 ![Image](https://images.unsplash.com/photo-1501780392773-287d506245a5?auto=format&fit=crop&w=1950&q=80&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D)
 
-
 2.การใช้งาน
 3.การแชร์เว็บไซต์
-   
+
 ## โครงสร้างโฟลเดอร์
 
 ```bash
@@ -84,5 +86,5 @@ Project/
 ```
 
 ## รายละเอียดโฟลเดอร์
-อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
 
+อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี

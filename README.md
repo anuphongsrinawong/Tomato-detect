@@ -70,7 +70,7 @@
     - ตัวแปร arduino_port  ที่ไฟล์ appRS.py บรรทัด 1076 เช่น
       ```bash
        arduino_port = 'COM8'  # แก้ตามพอร์ตที่ Arduino ต่อ
-    ```
+      ```
 
 
 ## การใช้งาน

@@ -26,43 +26,43 @@
     ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository](https://github.com/WongKinYiu/yolov7)
 
     หรือ
-    ```bash
-    git clone https://github.com/WongKinYiu/yolov7.git
-    ```
+```bash
+git clone https://github.com/WongKinYiu/yolov7.git
+```
     เข้าถึงโฟรเดอร์ yolov7 และ ติดตั้ง library ที่จำเป็น
-     ```bash
-    cd yolov7
-    pip install -r requirements.txt
-    ```
+```bash
+cd yolov7
+pip install -r requirements.txt
+```
     ทดลองรันโปรแกรม
-      ```bash
-    python detect.py
-    ```
+```bash
+python detect.py
+```
 
 2.  **นำเข้าไฟล์โปรเจค:**
    
     ออกจากโฟรเดอร์ก่อนหน้า
-    ```bash
-    cd ../
-    ```
+```bash
+cd ../
+```
     โคลนโปรเจค
-    ```bash
-    git clone https://github.com/anuphongsrinawong/Tomato-detect.git
-    ```
+```bash
+git clone https://github.com/anuphongsrinawong/Tomato-detect.git
+```
     เข้าถึงโฟลเดอร์ Tomato-detect และ ติดตั้ง library ที่จำเป็น
-    ```bash
-    cd Tomato-detect
-    pip install -r requirements.txt
-    ```
+```bash
+cd Tomato-detect
+pip install -r requirements.txt
+```
 3.  **ย้ายไฟล์จากโปรเจค Tomato-detect ไปยังโฟลเดอร์ yolov7 ตามโครงสร้าง:**
-   ```bash
-    Project/ #โฟลเดอร์
-        - yolov7/ #โฟลเดอร์
-          - static  #โฟลเดอร์
-          - templates #โฟลเดอร์
-          - appRS.py #ไฟล์
-          - tomatos-v7-3.pt #ไฟล์
-    -ngrok.exe #ไฟล์ สำหรับแชร์เว็บไซต์
+```bash
+Project/ #โฟลเดอร์
+    - yolov7/ #โฟลเดอร์
+        - static  #โฟลเดอร์
+        - templates #โฟลเดอร์
+        - appRS.py #ไฟล์
+         - tomatos-v7-3.pt #ไฟล์
+-ngrok.exe #ไฟล์ สำหรับแชร์เว็บไซต์
 ```
 3.  **สิ่งที่ต้องแก้ไข**
     - ตัวแปร arduino_port  ที่ไฟล์ appRS.py บรรทัด 1076 เช่น
@@ -86,7 +86,7 @@ python appRS.py
 http://127.0.0.1:5000/
 ```
 3. **การสั่งงาน**
-   - หน้า admin เป็นหน้าควบคุมหลัก
+    - หน้า admin เป็นหน้าควบคุมหลัก
      - กดปุ่ม Start Camera เพื่อเปิดกล้อง
      - กดปุ่ม Stop Camera เพื่อปิดกล้อง
      - กดปุ่ม Set Robot เพื่อตั้งค่าตำแหน่งหุ่นให้พร้อมใช้งาน
@@ -97,7 +97,7 @@ http://127.0.0.1:5000/
      - กดปุ่ม Saveimage before เพื่อบันทึกรูปตรงกลาง
      - กดปุ่ม Saveimage after เพื่อบันทึกรูปทางขวา
     
- - หน้า Control เป็นหน้าควบคุมตำแหน่งหุ่น
+    - หน้า Control เป็นหน้าควบคุมตำแหน่งหุ่น
      - กดปุ่ม Sethome เพื่อกลับมาตำแหน่ง 0 ทั้งสามเเกน
      - กดปุ่ม SetPosition เพื่อกลับเริ่มต้นของกล้อง
      - กรอกตำแหน่ง ทั้ง 3 แกน และกดปุ่ม Submit เพื่อไปยังตำแหน่งที่กรอก

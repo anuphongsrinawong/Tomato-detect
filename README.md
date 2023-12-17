@@ -15,17 +15,64 @@
 1. [การติดตั้ง](#การติดตั้ง)
 2. [การใช้งาน](#การใช้งาน)
 3. [ตัวอย่าง](#ตัวอย่าง)
-4. [รายละเอียดเพิ่มเติม](#รายละเอียดเพิ่มเติม)
-5. [การเป็นนักพัฒนา](#การเป็นนักพัฒนา)
-6. [การให้สิ่งที่สามารถเพิ่มเติม](#การให้สิ่งที่สามารถเพิ่มเติม)
-7. [การร่วมมือ](#การร่วมมือ)
-8. [ลิขสิทธิ์และใบอนุญาต](#ลิขสิทธิ์และใบอนุญาต)
+4. [โครงสร้างโฟลเดอร์](#โครงสร้างโฟลเดอร์)
+5. [รายละเอียดโฟลเดอร์](#รายละเอียดโฟลเดอร์)
 
 ## การติดตั้ง
 
-อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
+- ข้อกำหนด python เวอร์ชั่น 3.11.6
 
-### โครงสร้างโฟลเดอร์
+ดำเนินการทำตามขั้นตอนดังนี้
+
+1.  **ติดตั้ง YOLOv7:**
+
+    ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository](https://github.com/WongKinYiu/yolov7)
+
+    หรือ
+
+    ```bash
+     git clone https://github.com/WongKinYiu/yolov7.git
+    ```
+
+2.  **นำเข้าไฟล์โปรเจค:**
+    นำเข้าไฟล์:
+    ```bash
+    cd yolov7
+    git clone https://github.com/anuphongsrinawong/Tomato-detect.git
+    ```
+3.  **ติดตั้ง Library:**
+    ติดตั้ง Library ที่จำเป็น:
+    ```bash
+    pip install -r requirements.txt
+    ```
+
+## การใช้งาน
+
+ขั้นตอนการใช้งานมีดังนี้
+
+1. **เริ่มการทำงานโปรแกรม**
+
+   ```bash
+     cd yolov7
+     python appRS.py
+   ```
+
+2. **การแชร์เว็บไซต์ให้สามารถเข้าถึงผ่านอินเตอร์เน็ต**
+
+   - 1.กดRun ngrok.exe
+   - 2.พิมพ์คำสั่ง
+
+   ```bash
+     ngrok http 5000
+   ```
+
+## ตัวอย่าง
+
+1.การติดตั้ง
+2.การใช้งาน
+3.การแชร์เว็บไซต์
+
+## โครงสร้างโฟลเดอร์
 
 ```bash
 Project/
@@ -33,49 +80,9 @@ Project/
   - static
   - templates
   - appRS.py
+  - tomatos-v7-3.pt
 ```
 
-1.  **ติดตั้ง YOLOv7:**
-
-    - ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository](https://github.com/WongKinYiu/yolov7) หรือ
-
-    ```bash
-     git clone https://github.com/WongKinYiu/yolov7.git
-    ```
-
-2.  **นำเข้าไฟล์โปรเจค:**
-    - เข้าไปยังโฟลเดอร์ และ นำเข้าไฟล์:
-      ```bash
-      cd yolov7
-      git clone https://github.com/anuphongsrinawong/Tomato-detect.git
-      ```
-3.  **ติดตั้ง Library:**
-4.  - ติดตั้ง:
-      ```bash
-      pip install opencv-python==4.5.3
-      Flask 2.3.3
-      Flask-SocketIO 5.3.6
-      pyrealsense2 2.53.1.4623
-      serial 0.0.97
-      torch 1.13.1
-      numpy 1.24.1
-           ```
-
-5.  **ติดตั้ง and เชื่อมต่อ Arduino:**
-
-    - Install the necessary libraries for communication with Arduino and establish a connection between Arduino and your computer.
-
-6.  **Start the System:**
-    - Start the system by running your main program and access the control interface through the Flask web application.
-
-## การใช้งาน
+## รายละเอียดโฟลเดอร์
 
 อธิบายขั้นตอนการติดตั้งโปรเจ็กต์ของคุณและระบุความขึ้นต้นที่ผู้ใช้จำเป็นต้องมี
-
-1. **เริ่มการทำงานโปรแกรม**
-   ```bash
-     cd yolov7
-     python appRS.py
-   ```
-
-## รายละเอียดโฟลเดอร์

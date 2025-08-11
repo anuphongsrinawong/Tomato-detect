@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+.venv/
+env/
+venv/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Runs/outputs
+runs/
+
+# Models (keep tracked ones explicitly)
+*.pt
+!tomatos-v7-3.pt
+
+# Third party clones
+third_party/
+
+# IDE
+.vscode/
+.idea/

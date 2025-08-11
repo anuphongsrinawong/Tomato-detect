@@ -1,109 +1,106 @@
-# โปรเจกต์ตรวจจับความแดงของมะเขือเทศ
+# Tomato-detect (YOLOv7 + Flask + Intel RealSense + Arduino)
 
-โปรเจกต์นี้เป็นระบบตรวจจับความแดงของมะเขือเทศ (Tomato Ripeness Detection) โดยใช้ YOLOv7 (You Only Look Once version 7) เป็นโมเดลที่ใช้ในการตรวจจับวัตถุ ซึ่งในที่นี้คือการตรวจจับความแดงของมะเขือเทศเพื่อประเมินความสุกและคุณภาพของผลผลิต.
+ระบบตรวจจับความแดง/ความสุกของมะเขือเทศด้วย YOLOv7 พร้อมเว็บ UI ควบคุม และส่งพิกัดไปยัง Arduino สำหรับควบคุมหุ่นยนต์เก็บเกี่ยว ใช้งานได้ “พกพา” ไม่ต้องย้ายไฟล์เข้าโฟลเดอร์ YOLOv7 อีกต่อไป แอปจะดึงซอร์ส YOLOv7 ให้อัตโนมัติเมื่อรันครั้งแรก
 
 ## ฟีเจอร์
 
-1. **YOLOv7 Model:** ใช้ YOLOv7 เป็นโมเดลที่ถูกพัฒนาขึ้นเพื่อการตรวจจับวัตถุทั่วไป และได้ถูกปรับให้เหมาะสมกับการตรวจจับความแดงของมะเขือเทศในที่นี้.
+- YOLOv7 inference แบบเรียลไทม์จากกล้อง Intel RealSense (RGB+D)
+- เว็บแอป Flask + Socket.IO สำหรับดูภาพ, ตารางผลตรวจ, และสั่งงานหุ่น
+- ส่งพิกัด (x, y, z) และสั่งโหมด sethome/setposition/เก็บผลผลิต ไปยัง Arduino ผ่าน Serial
+- ตั้งค่าด้วยตัวแปรแวดล้อม: พอร์ต/บอดเรต Arduino, โฮสต์/พอร์ตเว็บเซิร์ฟเวอร์, ตำแหน่ง YOLOv7
 
-2. **Flask Web Control:** ใช้ Flask เป็นเฟรมเวิร์กเพื่อสร้างหน้าควบคุมที่ให้ผู้ใช้สามารถตั้งค่าและติดตามผลการตรวจจับได้ผ่านทางเว็บไซต์.
+## โครงสร้างโปรเจกต์ (สำคัญ)
 
-3. **Data and Coordinates to Arduino:** ผลลัพธ์จากการตรวจจับและข้อมูลที่เกี่ยวข้อง (เช่น พิกัดของมะเขือเทศที่ตรวจจับได้) จะถูกส่งไปยัง Arduino เพื่อการประมวลผลและการปฏิบัติการต่าง ๆ ที่เกี่ยวข้องกับระบบ (เช่น การควบคุมการรดน้ำหรือการเก็บเกี่ยว).
-
-## สารบัญ
-
-1. [การติดตั้ง](#การติดตั้ง)
-2. [การใช้งาน](#การใช้งาน)
-
-## การติดตั้ง
-
-- ข้อกำหนด python เวอร์ชั่น 3.11.6
-
-ดำเนินการทำตามขั้นตอนดังนี้
-
-1.  **ติดตั้ง YOLOv7:**
-
-    ปฏิบัติตามคำแนะนำในการติดตั้งสำหรับ YOLOv7 ตามที่ระบุไว้ใน [YOLOv7 repository](https://github.com/WongKinYiu/yolov7)
-
-    หรือ
-    ```bash
-    git clone https://github.com/WongKinYiu/yolov7.git
-    ```
-    เข้าถึงโฟรเดอร์ yolov7 และ ติดตั้ง library ที่จำเป็น
-    ```bash
-    cd yolov7
-    pip install -r requirements.txt
-    ```
-    ทดลองรันโปรแกรม
-    ```bash
-    python detect.py
-    ```
-
-2.  **นำเข้าไฟล์โปรเจค:**
-   
-    ออกจากโฟรเดอร์ก่อนหน้า
-    ```bash
-    cd ../
-    ```
-    โคลนโปรเจค
-    ```bash
-    git clone https://github.com/anuphongsrinawong/Tomato-detect.git
-    ```
-    เข้าถึงโฟลเดอร์ Tomato-detect และ ติดตั้ง library ที่จำเป็น
-    ```bash
-    cd Tomato-detect
-    pip install -r requirements.txt
-    ```
-3.  **ย้ายไฟล์จากโปรเจค Tomato-detect ไปยังโฟลเดอร์ yolov7 ตามโครงสร้าง:**
-```bash
-Project/ #โฟลเดอร์
-    - yolov7/ #โฟลเดอร์
-        - static  #โฟลเดอร์
-        - templates #โฟลเดอร์
-        - appRS.py #ไฟล์
-         - tomatos-v7-3.pt #ไฟล์
--ngrok.exe #ไฟล์ สำหรับแชร์เว็บไซต์
 ```
-3.  **สิ่งที่ต้องแก้ไข**
-    - ตัวแปร arduino_port  ที่ไฟล์ appRS.py บรรทัด 1076 เช่น
-    ```bash
-    arduino_port = 'COM8'  # แก้ตามพอร์ตที่ Arduino ต่อ
-    ```
+Tomato-detect/
+  appRS.py
+  tomatos-v7-3.pt
+  static/
+  templates/
+  requirements.txt
+  README.md
+```
 
+ไม่ต้องมีโฟลเดอร์ `yolov7/` ข้างเคียงอีกแล้ว ตัวโปรแกรมจะคลอน YOLOv7 มาไว้ที่ `third_party/yolov7` โดยอัตโนมัติเมื่อรันครั้งแรก (หรือกำหนดเองด้วย `YOLOV7_PATH`)
+
+## ข้อกำหนดระบบ
+
+- Python 3.11.x แนะนำ 3.11.6
+- กล้อง Intel RealSense (เช่น D435/D455) และไดร์เวอร์/SDK ติดตั้งพร้อมใช้งาน
+- CUDA (ถ้ามี GPU) เพื่อความเร็ว, หากไม่มีจะรันโหมด CPU ได้
+
+## การติดตั้งแบบรวดเร็ว
+
+```bash
+git clone https://github.com/anuphongsrinawong/Tomato-detect.git
+cd Tomato-detect
+python -m venv .venv
+.venv\Scripts\activate  # Windows
+# หรือ source .venv/bin/activate  # Linux/macOS
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# ติดตั้ง pyrealsense2 เฉพาะหากใช้กล้อง Intel RealSense
+pip install pyrealsense2
+```
+
+ถ้าต้องระบุที่อยู่ซอร์ส YOLOv7 เอง ให้ตั้งค่าตัวแปรแวดล้อม `YOLOV7_PATH` ชี้ไปยังโฟลเดอร์ที่มีไฟล์ YOLOv7 (เช่นที่โคลนไว้ก่อนหน้า)
+
+## ตัวแปรแวดล้อมที่รองรับ
+
+- `YOLOV7_PATH` เส้นทางโฟลเดอร์ YOLOv7 (ไม่จำเป็น หากให้แอปคลอนอัตโนมัติได้)
+- `ARDUINO_PORT` พอร์ต Serial ของ Arduino (เช่น Windows: COM8, Linux: /dev/ttyACM0)
+- `BAUD_RATE` ความเร็วบอดเรต Serial (ดีฟอลต์ 9600)
+- `HOST` โฮสต์ของเว็บเซิร์ฟเวอร์ (ดีฟอลต์ 0.0.0.0)
+- `PORT` พอร์ตของเว็บเซิร์ฟเวอร์ (ดีฟอลต์ 5000)
+
+ตัวอย่างบน Windows PowerShell:
+
+```powershell
+$env:ARDUINO_PORT="COM8"
+$env:BAUD_RATE="9600"
+$env:HOST="0.0.0.0"
+$env:PORT="5000"
+python appRS.py
+```
 
 ## การใช้งาน
 
-ขั้นตอนการใช้งานมีดังนี้
+1) เปิดเซิร์ฟเวอร์
 
-1. **เริ่มการทำงานโปรแกรม**
-    ```bash
-    cd yolov7
-    python appRS.py
-    ```
+```bash
+python appRS.py
+```
 
-2. **การเปิดเว็บไซต์**
-    ```bash
-    http://127.0.0.1:5000/
-    ```
-3. **การสั่งงาน**
-    - หน้า admin เป็นหน้าควบคุมหลัก
-         - กดปุ่ม Start Camera เพื่อเปิดกล้อง
-         - กดปุ่ม Stop Camera เพื่อปิดกล้อง
-         - กดปุ่ม Set Robot เพื่อตั้งค่าตำแหน่งหุ่นให้พร้อมใช้งาน
-         - กดปุ่ม Stop เพื่อปิดกล้อง
-         - กดปุ่ม Cut เพื่อสั่งตัดตามจำนวนลูกที่สุกจากข้อมูลในตาราง
-         - กดปุ่ม lock Cut เพื่อล็อกคำสั่งการตัดลูกต่อๆไป และควรกด Set Robot เพื่อกลับตำแหน่งเริ่มต้นของกล้อง
-         - กดปุ่ม unlock Cut เพื่อยกเลิกการสั่งตัด
-         - กดปุ่ม Saveimage before เพื่อบันทึกรูปตรงกลาง
-         - กดปุ่ม Saveimage after เพื่อบันทึกรูปทางขวา
-    
-    - หน้า Control เป็นหน้าควบคุมตำแหน่งหุ่น
-         - กดปุ่ม Sethome เพื่อกลับมาตำแหน่ง 0 ทั้งสามเเกน
-         - กดปุ่ม SetPosition เพื่อกลับเริ่มต้นของกล้อง
-         - กรอกตำแหน่ง ทั้ง 3 แกน และกดปุ่ม Submit เพื่อไปยังตำแหน่งที่กรอก
-   
+2) เปิดเว็บเบราว์เซอร์
 
+```
+http://127.0.0.1:5000/
+```
 
+3) หน้าจอหลัก
 
+- หน้า Home: ดูภาพสตรีม/ผลตรวจ
+- หน้า Control: ป้อนพิกัดและสั่งให้หุ่นไปยังตำแหน่ง
+- หน้า Admin: ควบคุม Start/Stop กล้อง, Set Robot, Farming, บันทึกรูปก่อน/หลัง, ล็อก/ปลดล็อกคำสั่ง
 
+หมายเหตุ: หากยังไม่ติดตั้ง `pyrealsense2` หรือไม่ได้เสียบกล้อง Intel RealSense แอปจะฟ้องและหยุด ให้ติดตั้งและเชื่อมต่อก่อน
+
+## โมเดล
+
+ไฟล์โมเดล `tomatos-v7-3.pt` อยู่ในรากโปรเจกต์ ใช้เป็นค่าเริ่มต้น คุณสามารถเปลี่ยนผ่านอาร์กิวเมนต์ `--weights` ขณะรันได้ด้วย
+
+```bash
+python appRS.py --weights path/to/your_model.pt
+```
+
+## ปัญหาที่พบบ่อย
+
+- ImportError YOLOv7: ตั้ง `YOLOV7_PATH` ให้ถูก หรือให้แอปคลอนอัตโนมัติ (ต้องมี git)
+- ImportError pyrealsense2: ติดตั้งด้วย `pip install pyrealsense2` และติดตั้ง SDK/ไดร์เวอร์
+- เปิดพอร์ต COM ไม่ได้: ตรวจสอบพอร์ต `ARDUINO_PORT` และสิทธิ์การใช้งานอุปกรณ์
+
+## การพัฒนา/ดีพลอยต่อ
+
+แนะนำให้ใช้ Python virtualenv แยกโปรเจกต์, pin เวอร์ชันใน `requirements.txt`, และใช้ GPU/CUDA หากต้องการความเร็วสูงสุด
 

@@ -12,11 +12,51 @@ import argparse
 import torch
 import torch.backends.cudnn as cudnn
 from numpy import random
-import pyrealsense2 as rs
 import math
 from decimal import Decimal, ROUND_HALF_UP
 import threading
+import os
+import sys
+import subprocess
 
+
+def _ensure_yolov7_on_path() -> bool:
+    """Ensure YOLOv7 source is importable. Try env var, local third_party clone,
+    and as a last resort auto-clone into third_party/yolov7.
+    """
+    yolo_env_path = os.getenv("YOLOV7_PATH")
+    candidates = []
+    if yolo_env_path:
+        candidates.append(yolo_env_path)
+    repo_local = os.path.join(os.path.dirname(__file__), "third_party", "yolov7")
+    candidates.append(repo_local)
+
+    for path in candidates:
+        if path and os.path.isdir(path):
+            if path not in sys.path:
+                sys.path.insert(0, path)
+            return True
+
+    # Attempt to auto-clone
+    try:
+        os.makedirs(os.path.dirname(repo_local), exist_ok=True)
+        subprocess.run([
+            "git", "clone", "--depth", "1",
+            "https://github.com/WongKinYiu/yolov7.git", repo_local
+        ], check=True)
+        if repo_local not in sys.path:
+            sys.path.insert(0, repo_local)
+        print("YOLOv7 cloned into:", repo_local)
+        return True
+    except Exception as e:
+        print("Failed to auto-clone YOLOv7:", e)
+        return False
+
+
+if not _ensure_yolov7_on_path():
+    raise ImportError(
+        "ไม่สามารถโหลดโมดูล YOLOv7 ได้ กรุณาตั้งค่า YOLOV7_PATH หรือให้มีโฟลเดอร์ third_party/yolov7"
+    )
 
 from models.experimental import attempt_load
 from utils.general import check_img_size, non_max_suppression, scale_coords, set_logging
@@ -25,7 +65,7 @@ from utils.torch_utils import select_device, load_classifier, time_synchronized,
 
 
 app = Flask(__name__)
-socketio = SocketIO(app)
+socketio = SocketIO(app, cors_allowed_origins="*")
 
 
 class Process_system:
@@ -115,7 +155,15 @@ class Process_system:
         print('Successfully after saved')
 
     def start_camera(self):
-         #realsense config
+        # โหลดไลบรารี RealSense เมื่อจำเป็น เพื่อให้รันได้แม้ยังไม่ติดตั้ง
+        try:
+            import pyrealsense2 as rs  # noqa: F401
+        except ImportError as e:
+            raise ImportError(
+                "ไม่พบ pyrealsense2 กรุณาติดตั้ง Intel RealSense SDK (pip install pyrealsense2) และเชื่อมต่อกล้อง"
+            ) from e
+
+        # realsense config
         config = rs.config()
         config.enable_stream(rs.stream.color, 640, 480, rs.format.bgr8, 30)
         config.enable_stream(rs.stream.depth, 640, 480, rs.format.z16, 30)
@@ -279,8 +327,8 @@ class Yolov7_AI():
         if device.type != 'cpu':
             model(torch.zeros(1, 3, imgsz, imgsz).to(device).type_as(
                 next(model.parameters())))  # run once
-        old_img_w = old_img_h = imgsz
-        old_img_b = 1
+        self.old_img_w = self.old_img_h = imgsz
+        self.old_img_b = 1
 
         tt1 = time.time()
         ttt = tt1 - tt0
@@ -315,10 +363,12 @@ class Yolov7_AI():
             img = img.unsqueeze(0)
 
             # Warmup
-        if self.device.type != 'cpu' and (old_img_b != img.shape[0] or old_img_h != img.shape[2] or old_img_w != img.shape[3]):
-            old_img_b = img.shape[0]
-            old_img_h = img.shape[2]
-            old_img_w = img.shape[3]
+        if self.device.type != 'cpu' and (
+            self.old_img_b != img.shape[0] or self.old_img_h != img.shape[2] or self.old_img_w != img.shape[3]
+        ):
+            self.old_img_b = img.shape[0]
+            self.old_img_h = img.shape[2]
+            self.old_img_w = img.shape[3]
             for i in range(3):
                 self.model(img, augment=self.opt.augment)[0]
 
@@ -1072,9 +1122,19 @@ def handle_disconnect():
 
 
 if __name__ == '__main__':
-    # กำหนดพอร์ตซีเรียลที่ Arduino ต่อ
-    arduino_port = 'COM8'  # แก้ตามพอร์ตที่ Arduino ต่อ
-    baud_rate = 9600
+    # ตั้งค่าพอร์ตและความเร็ว Serial จากตัวแปรแวดล้อม (มีค่าเริ่มต้น)
+    arduino_port = os.getenv('ARDUINO_PORT', 'COM8')
+    try:
+        baud_rate = int(os.getenv('BAUD_RATE', '9600'))
+    except ValueError:
+        baud_rate = 9600
+
+    # โฮสต์และพอร์ตของเว็บเซิร์ฟเวอร์
+    host = os.getenv('HOST', '0.0.0.0')
+    try:
+        port = int(os.getenv('PORT', '5000'))
+    except ValueError:
+        port = 5000
 
     # arduino_serial = serial.Serial(arduino_port, baud_rate, timeout=1)
-    socketio.run(app, host='127.0.0.1', port=5000, debug=True)
+    socketio.run(app, host=host, port=port, debug=True)

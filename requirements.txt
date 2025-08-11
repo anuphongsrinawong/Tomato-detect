@@ -1,5 +1,9 @@
 Flask==2.3.3
 Flask-SocketIO==5.3.6
-pyrealsense2==2.54.2.5684
-serial==0.0.97
-eventlet
+eventlet==0.36.1
+torch>=1.13.0
+numpy>=1.23.0
+opencv-python>=4.8.0.74
+pyserial>=3.5
+# ติดตั้ง pyrealsense2 เฉพาะเมื่อมีใช้งานกล้อง Intel RealSense
+# สามารถติดตั้งเพิ่มด้วย: pip install pyrealsense2
